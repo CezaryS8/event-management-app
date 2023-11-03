@@ -27,11 +27,18 @@ public class UserService {
         return userRepository.findAllUsers();
     }
 
-    public User saveUser(User user) {
+    public User createUser(User user) {
         return userRepository.saveUser(user);
     }
 
     public void deleteUser(Long userId) {
         userRepository.deleteUserById(userId);
+    }
+
+    public User updateUser(User user) {
+        if(userRepository.findUserById(user.getId()) == null) {
+            throw new UserNotFoundException("User doesn't exist! Nothing updated.");
+        }
+        return userRepository.saveUser(user);
     }
 }

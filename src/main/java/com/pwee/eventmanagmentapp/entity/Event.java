@@ -30,8 +30,9 @@ public class Event {
 
     private String link;
 
+    private Long coordinatorId;
 //    @ManyToOne
-    private User coordinator;
+//    private User coordinator;
 
 //    @OneToMany(mappedBy = "coordinator")
 //    private List<Event> organizedEvents;

@@ -24,7 +24,7 @@ public class UserController {
     }
     @PostMapping("/")
     public User saveUser(@RequestBody User user) {
-        return userService.saveUser(user);
+        return userService.createUser(user);
     }
 
     @DeleteMapping("/{userId}")
@@ -32,4 +32,9 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
+    @PutMapping("/{userId}")
+    public User updateUser(@PathVariable Long userId, @RequestBody User user) {
+        user.setId(userId);
+        return userService.updateUser(user);
+    }
 }
