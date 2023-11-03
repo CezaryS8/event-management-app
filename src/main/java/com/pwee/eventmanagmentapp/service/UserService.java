@@ -2,22 +2,36 @@ package com.pwee.eventmanagmentapp.service;
 
 import com.pwee.eventmanagmentapp.entity.User;
 import com.pwee.eventmanagmentapp.exception.UserNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.pwee.eventmanagmentapp.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserService {
 
-    private List<User> userRepository = new ArrayList<>();
+    private final UserRepository userRepository;
 
-    public User getUserById(Integer userId) {
-        return userRepository.findUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User doesn't exist!"), HttpStatus.NOT_FOUND));
+    public User getUserById(Long userId) {
+         User user = userRepository.findUserById(userId);
+         if(user == null) {
+             throw new UserNotFoundException("User doesn't exist!");
+         }
+        return user;
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.findAllUsers();
+    }
+
+    public User saveUser(User user) {
+        return userRepository.saveUser(user);
+    }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteUserById(userId);
+    }
 }

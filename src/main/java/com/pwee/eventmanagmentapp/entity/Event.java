@@ -1,9 +1,9 @@
 package com.pwee.eventmanagmentapp.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.Id;
+//import jakarta.persistence.ManyToOne;
+//import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -18,26 +18,21 @@ import java.util.List;
 @EqualsAndHashCode
 public class Event {
 
-    @Id
-    @GeneratedValue
     private Long id;
 
-    @NotNull
     private String name;
 
-    @NotNull
     private LocalDateTime startDate;
 
-    @NotNull
     private LocalDateTime endDate;
 
     private String description;
 
     private String link;
 
-    @ManyToOne
+//    @ManyToOne
     private User coordinator;
 
-    @OneToMany(mappedBy = "coordinator")
-    private List<Event> organizedEvents;
+//    @OneToMany(mappedBy = "coordinator")
+//    private List<Event> organizedEvents;
 }
