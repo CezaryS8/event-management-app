@@ -1,7 +1,6 @@
 package com.pwee.eventmanagmentapp.service;
 
 import com.pwee.eventmanagmentapp.entity.Event;
-import com.pwee.eventmanagmentapp.entity.User;
 import com.pwee.eventmanagmentapp.exception.EventNotFoundException;
 import com.pwee.eventmanagmentapp.exception.UserNotFoundException;
 import com.pwee.eventmanagmentapp.repository.EventRepository;
@@ -46,19 +45,4 @@ public class EventService {
         }
         return eventRepository.saveEvent(event, userId);
     }
-
-
-    // Mocking an event repository (for demonstration purposes)
-//    private List<Event> eventRepository = new ArrayList<>();
-
-//    public Event createEvent(Event event, Long userId) {
-//        User user = userService.getUserById(userId);
-//        event.setCoordinator(user);
-//
-//        // Simulating saving to a database (storing in a collection in this case)
-//        Event savedEvent = saveEvent(event);
-//
-//        return savedEvent;
-//    }
-
 }

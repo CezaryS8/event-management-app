@@ -24,7 +24,6 @@ public class UserControllerITest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
     private User user;
 
     @AfterEach
@@ -336,7 +335,6 @@ public class UserControllerITest {
         );
     }
     private ResponseEntity<Void> makeUserDeletionRequest(Long userId) {
-//        restTemplate.delete("http://localhost:" + port + "/api/v1/user/" + userId);
 
         return restTemplate.exchange(
                 "http://localhost:" + port + "/api/v1/user/" + userId,
