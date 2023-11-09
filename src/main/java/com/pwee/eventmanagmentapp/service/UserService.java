@@ -48,6 +48,10 @@ public class UserService {
 
     public UserDTO createUser(User userDTO) {
 
+        if(userDTO == null) {
+            throw new IllegalArgumentException("Can't create user from null :(");
+        }
+
         User user = User
                 .builder()
                 .name(userDTO.getName())
