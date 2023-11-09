@@ -1,6 +1,8 @@
 package com.pwee.eventmanagmentapp.service;
 
+import com.pwee.eventmanagmentapp.dto.EventDTO;
 import com.pwee.eventmanagmentapp.entity.Event;
+import com.pwee.eventmanagmentapp.entity.User;
 import com.pwee.eventmanagmentapp.exception.EventNotFoundException;
 import com.pwee.eventmanagmentapp.exception.UserNotFoundException;
 import com.pwee.eventmanagmentapp.repository.EventRepository;
@@ -17,32 +19,92 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserService userService;
 
-    public Event getEventById(Long eventId) {
-        Event event = eventRepository.findEventById(eventId);
-        if(event == null) {
-            throw new EventNotFoundException("Event doesn't exist!");
-        }
-        return event;
+    public EventDTO getEventById(Long eventId) {
+
+        Event event = eventRepository
+                .findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException("Event doesn't exist!"));
+
+        return EventDTO
+                .builder()
+                .name(event.getName())
+                .startDate(event.getStartDate())
+                .endDate(event.getEndDate())
+                .description(event.getDescription())
+                .link(event.getLink())
+                .build();
     }
-    public List<Event> getAllEvents() {
-        return eventRepository.findAllEvents();
+
+    public List<EventDTO> getAllEvents() {
+
+        return eventRepository
+                .findAll()
+                .stream()
+                .map((event) -> new EventDTO(
+                        event.getId(),
+                        event.getName(),
+                        event.getStartDate(),
+                        event.getEndDate(),
+                        event.getDescription(),
+                        event.getLink()))
+                .toList();
     }
-    public Event createEvent(Event event, Long userId) {
-        if(userService.getUserById(userId) == null) {
-            throw new UserNotFoundException("User doesn't exist! Nothing created.");
-        }
-        return eventRepository.saveEvent(event, userId);
+    public EventDTO createEvent(EventDTO eventDTO, Long userId) {
+        // TODO: Add user to event
+        User user = userService.getUserWithAllFields(userId);
+
+        Event event = Event
+                .builder()
+                .id(userId)
+                .name(eventDTO.getName())
+                .startDate(eventDTO.getStartDate())
+                .endDate(eventDTO.getEndDate())
+                .description(eventDTO.getDescription())
+                .link(eventDTO.getLink())
+                .build();
+
+        Event createdEvent = eventRepository.save(event);
+        user.getEvents().add(event);
+        userService.updateUser(user);
+
+        return eventDTO;
     }
     public void deleteEventById(Long eventId) {
-        eventRepository.deleteEventById(eventId);
+        eventRepository.deleteById(eventId);
     }
-    public Event updateEvent(Event event, Long userId) {
-        if(eventRepository.findEventById(event.getId()) == null) {
-            throw new EventNotFoundException("Event doesn't exist! Nothing updated.");
-        }
-        if(userService.getUserById(userId) == null) {
-            throw new UserNotFoundException("User doesn't exist! Nothing updated.");
-        }
-        return eventRepository.saveEvent(event, userId);
+    public EventDTO updateEvent(EventDTO modifiedEvent, Long userId) {
+        User user = userService.getUserWithAllFields(userId);
+
+        Event foundUserCurrentlyExistingEvent = user
+                .getEvents()
+                .stream()
+                .filter(event -> modifiedEvent.getId().equals(event.getId()))
+                .findAny()
+                .orElseThrow(() ->
+                        new EventNotFoundException(
+                                String.format(
+                                        "Event with id=[%d] has not been found",
+                                        modifiedEvent.getId()
+                                )
+                        )
+                );
+
+        user.getEvents().remove(foundUserCurrentlyExistingEvent);
+
+        Event updatedEvent = Event
+                .builder()
+                .id(modifiedEvent.getId())
+                .name(modifiedEvent.getName())
+                .startDate(modifiedEvent.getStartDate())
+                .endDate(modifiedEvent.getEndDate())
+                .description(modifiedEvent.getDescription())
+                .link(modifiedEvent.getLink())
+                .build();
+
+        user.getEvents().add(updatedEvent);
+
+        userService.updateUser(user);
+
+        return modifiedEvent;
     }
 }

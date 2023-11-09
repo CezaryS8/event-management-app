@@ -1,5 +1,6 @@
 package com.pwee.eventmanagmentapp.controller;
 
+import com.pwee.eventmanagmentapp.dto.EventDTO;
 import com.pwee.eventmanagmentapp.entity.Event;
 import com.pwee.eventmanagmentapp.service.EventService;
 import jakarta.validation.Valid;
@@ -24,23 +25,23 @@ public class EventController {
 
     @GetMapping("/{eventId}")
     public ResponseEntity<?> getEventById(@PathVariable Long eventId) {
-        Event event = eventService.getEventById(eventId);
+        EventDTO event = eventService.getEventById(eventId);
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventService.getAllEvents();
+    @GetMapping("/")
+    public ResponseEntity<List<EventDTO>> getAllEvents() {
+        List<EventDTO> events = eventService.getAllEvents();
         return ResponseEntity.ok(events);
     }
 
     @PostMapping("/user/{userId}")
-    public ResponseEntity<?> createEvent(@Valid @RequestBody Event event, @PathVariable Long userId, BindingResult result) {
+    public ResponseEntity<?> createEvent(@Valid @RequestBody EventDTO event, @PathVariable Long userId, BindingResult result) {
         if (result.hasErrors()) {
             return handleValidationErrors(result);
         }
 
-        Event createdEvent = eventService.createEvent(event, userId);
+        EventDTO createdEvent = eventService.createEvent(event, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
@@ -51,12 +52,12 @@ public class EventController {
     }
 
     @PutMapping("/user/{userId}")
-    public ResponseEntity<?> updateEvent(@Valid @RequestBody Event event, @PathVariable Long userId, BindingResult result) {
+    public ResponseEntity<?> updateEvent(@Valid @RequestBody EventDTO event, @PathVariable Long userId, BindingResult result) {
         if (result.hasErrors()) {
             return handleValidationErrors(result);
         }
 
-        Event updatedEvent = eventService.updateEvent(event, userId);
+        EventDTO updatedEvent = eventService.updateEvent(event, userId);
         return ResponseEntity.ok(updatedEvent);
     }
 
