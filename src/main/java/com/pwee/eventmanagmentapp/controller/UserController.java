@@ -1,6 +1,5 @@
 package com.pwee.eventmanagmentapp.controller;
 
-import com.pwee.eventmanagmentapp.dto.UserCreationDTO;
 import com.pwee.eventmanagmentapp.dto.UserDTO;
 import com.pwee.eventmanagmentapp.entity.User;
 import com.pwee.eventmanagmentapp.exception.UserNotFoundException;

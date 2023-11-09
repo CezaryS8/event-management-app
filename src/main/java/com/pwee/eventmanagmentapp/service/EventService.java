@@ -4,12 +4,10 @@ import com.pwee.eventmanagmentapp.dto.EventDTO;
 import com.pwee.eventmanagmentapp.entity.Event;
 import com.pwee.eventmanagmentapp.entity.User;
 import com.pwee.eventmanagmentapp.exception.EventNotFoundException;
-import com.pwee.eventmanagmentapp.exception.UserNotFoundException;
 import com.pwee.eventmanagmentapp.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +48,6 @@ public class EventService {
                 .toList();
     }
     public EventDTO createEvent(EventDTO eventDTO, Long userId) {
-        // TODO: Add user to event
         User user = userService.getUserWithAllFields(userId);
 
         Event event = Event

@@ -5,12 +5,15 @@ import com.pwee.eventmanagmentapp.dto.UserDTO;
 import com.pwee.eventmanagmentapp.entity.User;
 import com.pwee.eventmanagmentapp.exception.UserNotFoundException;
 import com.pwee.eventmanagmentapp.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +25,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 public class UserServiceTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceTest.class);
 
     @Mock
     private UserRepository userRepository;
@@ -32,6 +37,8 @@ public class UserServiceTest {
 
     @Test
     void shouldReturnTheUserWhenUserWithThatIdIsInDB() {
+        LOGGER.info("Running shouldReturnTheUserWhenUserWithThatIdIsInDB test...");
+
         //given
         User user = makeUser();
         Long id = user.getId();
@@ -51,6 +58,8 @@ public class UserServiceTest {
 
     @Test
     void shouldThrowExceptionWhenUserWithThatIdIsNotInDB() {
+        LOGGER.info("Running shouldThrowExceptionWhenUserWithThatIdIsNotInDB test...");
+
         //given
         Long notExistingUserId = 1L;
         when(userRepository.findById(notExistingUserId)).thenReturn(Optional.empty());
@@ -67,6 +76,8 @@ public class UserServiceTest {
 
     @Test
     void shouldThrowExceptionWhenProvidedIdIsNull() {
+        LOGGER.info("Running shouldThrowExceptionWhenProvidedIdIsNull test...");
+
         //given
         Long nullId = null;
         when(userRepository.findById(nullId)).thenThrow(IllegalArgumentException.class);
@@ -82,6 +93,8 @@ public class UserServiceTest {
 
     @Test
     void shouldReturnAllUsersWhenGetAllUsersInvoked() {
+        LOGGER.info("Running shouldReturnAllUsersWhenGetAllUsersInvoked test...");
+
         //given
         User user1 = makeUser();
         User user2 = makeUser().toBuilder()
@@ -107,6 +120,8 @@ public class UserServiceTest {
 
     @Test
     void shouldReturnEmptyListWhenNoDataIsPresentInDB() {
+        LOGGER.info("Running shouldReturnEmptyListWhenNoDataIsPresentInDB test...");
+
         //given
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
@@ -121,6 +136,8 @@ public class UserServiceTest {
 
     @Test
     void shouldCreateNewUserWhenGivenUserHasAllRequiredData() {
+        LOGGER.info("Running shouldCreateNewUserWhenGivenUserHasAllRequiredData test...");
+
         //given
         User user = makeUser().toBuilder()
                 .id(null).build();
@@ -141,6 +158,8 @@ public class UserServiceTest {
 
     @Test
     void shouldUpdateUserDataWhenGivenUserAlreadyExists() {
+        LOGGER.info("Running shouldUpdateUserDataWhenGivenUserAlreadyExists test...");
+
         //given
         User user = makeUser();
         Long userId = user.getId();
@@ -167,6 +186,8 @@ public class UserServiceTest {
 
     @Test
     void shouldThrowExceptionOnUpdateWhenGivenUserDoesNotExist() {
+        LOGGER.info("Running shouldThrowExceptionOnUpdateWhenGivenUserDoesNotExist test...");
+
         //given
         User notExistingUser = makeUser();
 
@@ -185,6 +206,8 @@ public class UserServiceTest {
 
     @Test
     void shouldThrowExceptionOnUpdateWhenGivenUserIsNull() {
+        LOGGER.info("Running shouldThrowExceptionOnUpdateWhenGivenUserIsNull test...");
+
         //given
         User nullUser = null;
 
@@ -200,6 +223,8 @@ public class UserServiceTest {
 
     @Test
     void shouldDeleteUserWhenUserWithGivenIdExists() {
+        LOGGER.info("Running shouldDeleteUserWhenUserWithGivenIdExists test...");
+
         //given
         Long userId = 1L;
         doNothing().when(userRepository).deleteById(userId);
@@ -213,6 +238,8 @@ public class UserServiceTest {
 
     @Test
     void shouldNotBeExceptionWhenTryingToDeleteNotExistingUser() {
+        LOGGER.info("Running shouldNotBeExceptionWhenTryingToDeleteNotExistingUser test...");
+
         //given
         Long userId = 1L;
         doNothing().when(userRepository).deleteById(userId);

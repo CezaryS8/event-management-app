@@ -1,6 +1,5 @@
 package com.pwee.eventmanagmentapp.controller;
 
-import com.pwee.eventmanagmentapp.dto.UserCreationDTO;
 import com.pwee.eventmanagmentapp.dto.UserDTO;
 import com.pwee.eventmanagmentapp.entity.User;
 import org.junit.jupiter.api.*;
@@ -206,8 +205,6 @@ public class UserControllerITest {
 
             // then
             assertEquals(HttpStatus.OK, updateUserResponse.getStatusCode());
-//            assertEquals("UpdatedName", updateUserResponse.getBody().getName());
-//            assertEquals("UpdatedSurname", updateUserResponse.getBody().getSurname());
         }
 
         @Test

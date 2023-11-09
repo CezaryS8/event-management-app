@@ -74,25 +74,6 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-//    public UserDTO updateUser(User updatedUser) {
-//        if (updatedUser == null) {
-//            throw new IllegalArgumentException("User cannot be null!");
-//        }
-//        if(!userRepository.existsById(updatedUser.getId())) {
-//            throw new UserNotFoundException("User has not been found! Nothing updated.");
-//        }
-//
-//        userRepository.save(updatedUser);
-//
-//        return UserDTO
-//                .builder()
-//                .id(updatedUser.getId())
-//                .name(updatedUser.getName())
-//                .surname(updatedUser.getSurname())
-//                .email(updatedUser.getEmail())
-//                .build();
-//    }
-
     public UserDTO updateUser(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null!");
