@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/event")
+@RequestMapping("/api/v1/events")
 @AllArgsConstructor
 public class EventController {
 
@@ -29,7 +29,7 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<EventDTO>> getAllEvents() {
         List<EventDTO> events = eventService.getAllEvents();
         return ResponseEntity.ok(events);

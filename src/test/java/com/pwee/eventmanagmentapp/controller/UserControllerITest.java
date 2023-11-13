@@ -197,7 +197,7 @@ public class UserControllerITest {
 
             // when
             ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/",
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
                     new HttpEntity<>(updatedUser),
                     UserDTO.class
@@ -218,7 +218,7 @@ public class UserControllerITest {
 
             // when
             ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/",
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
                     new HttpEntity<>(user),
                     UserDTO.class
@@ -238,7 +238,7 @@ public class UserControllerITest {
 
             // when
             ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/",
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
                     new HttpEntity<>(nullUser),
                     UserDTO.class
@@ -255,7 +255,7 @@ public class UserControllerITest {
 
             // when
             ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/",
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
                     new HttpEntity<>(user),
                     UserDTO.class
@@ -319,13 +319,13 @@ public class UserControllerITest {
 
     private ResponseEntity<UserDTO> makeGetUserByIdRequest(Long userId) {
         return restTemplate.getForEntity(
-                "http://localhost:" + port + "/api/v1/user/" + userId,
+                "http://localhost:" + port + "/api/v1/users/" + userId,
                 UserDTO.class
         );
     }
     private ResponseEntity<UserDTO[]> makeGetAllUsersRequest() {
         return restTemplate.getForEntity(
-                "http://localhost:" + port + "/api/v1/user/",
+                "http://localhost:" + port + "/api/v1/users/",
                 UserDTO[].class
         );
     }
@@ -333,7 +333,7 @@ public class UserControllerITest {
 
     private ResponseEntity<UserDTO> makeUserCreationRequest(User testUser) {
         return restTemplate.postForEntity(
-                "http://localhost:" + port + "/api/v1/user/",
+                "http://localhost:" + port + "/api/v1/users/",
                 testUser,
                 UserDTO.class
         );
@@ -341,7 +341,7 @@ public class UserControllerITest {
     private ResponseEntity<Void> makeUserDeletionRequest(Long userId) {
 
         return restTemplate.exchange(
-                "http://localhost:" + port + "/api/v1/user/" + userId,
+                "http://localhost:" + port + "/api/v1/users/" + userId,
                 HttpMethod.DELETE,
                 null,
                 Void.class
