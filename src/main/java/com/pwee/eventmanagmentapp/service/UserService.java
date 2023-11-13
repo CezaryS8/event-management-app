@@ -1,10 +1,11 @@
 package com.pwee.eventmanagmentapp.service;
 
+import com.pwee.eventmanagmentapp.dto.UserCreationDTO;
+import com.pwee.eventmanagmentapp.dto.UserDTO;
 import com.pwee.eventmanagmentapp.entity.User;
 import com.pwee.eventmanagmentapp.exception.UserNotFoundException;
 import com.pwee.eventmanagmentapp.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,30 +16,80 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User getUserById(Long userId) {
-         User user = userRepository.findUserById(userId);
-         if(user == null) {
-             throw new UserNotFoundException("User doesn't exist!");
-         }
-        return user;
+    public UserDTO getUserById(Long userId) {
+
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User doesn't exist!"));
+
+        return UserDTO
+                .builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .build();
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAllUsers();
+    public User getUserWithAllFields(Long userId) {
+        return userRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User doesn't exist!"));
     }
 
-    public User createUser(User user) {
-        return userRepository.saveUser(user);
+    public List<UserDTO> getAllUsers() {
+
+        return userRepository
+                .findAll()
+                .stream()
+                .map((user -> new UserDTO(user.getId(), user.getName(), user.getSurname(), user.getEmail())))
+                .toList();
+    }
+
+    public UserDTO createUser(User userDTO) {
+
+        if(userDTO == null) {
+            throw new IllegalArgumentException("Can't create user from null :(");
+        }
+
+        User user = User
+                .builder()
+                .name(userDTO.getName())
+                .surname(userDTO.getSurname())
+                .email(userDTO.getEmail())
+                .password(userDTO.getPassword())
+                .build();
+
+        User createdUser = userRepository.save(user);
+        return UserDTO
+                .builder()
+                .id(createdUser.getId())
+                .name(createdUser.getName())
+                .surname(createdUser.getSurname())
+                .email(createdUser.getEmail())
+                .build();
     }
 
     public void deleteUser(Long userId) {
-        userRepository.deleteUserById(userId);
+        userRepository.deleteById(userId);
     }
 
-    public User updateUser(User user) {
-        if(userRepository.findUserById(user.getId()) == null) {
-            throw new UserNotFoundException("User doesn't exist! Nothing updated.");
+    public UserDTO updateUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null!");
         }
-        return userRepository.saveUser(user);
+        if(!userRepository.existsById(user.getId())) {
+            throw new UserNotFoundException("User has not been found! Nothing updated.");
+        }
+
+        userRepository.save(user);
+
+        return UserDTO
+                .builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .build();
     }
 }

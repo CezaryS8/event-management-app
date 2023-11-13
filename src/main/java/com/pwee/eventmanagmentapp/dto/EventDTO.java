@@ -1,25 +1,21 @@
-package com.pwee.eventmanagmentapp.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+package com.pwee.eventmanagmentapp.dto;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity(name = "events")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder(toBuilder = true)
 @EqualsAndHashCode
-public class Event {
+public class EventDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_generator")
+    @NotNull
     private Long id;
 
     @NotNull
@@ -38,9 +34,4 @@ public class Event {
     private String description;
 
     private String link;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private User user;
 }

@@ -1,5 +1,6 @@
 package com.pwee.eventmanagmentapp.controller;
 
+import com.pwee.eventmanagmentapp.dto.UserDTO;
 import com.pwee.eventmanagmentapp.entity.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,9 @@ public class UserControllerITest {
 
     @AfterEach
     void tearDown() {
-        ResponseEntity<User[]> allUsersResponse = makeGetAllUsersRequest();
+        ResponseEntity<UserDTO[]> allUsersResponse = makeGetAllUsersRequest();
         if (allUsersResponse != null && allUsersResponse.getBody() != null) {
-            for (User user : allUsersResponse.getBody()) {
+            for (UserDTO user : allUsersResponse.getBody()) {
                 makeUserDeletionRequest(user.getId());
             }
         }
@@ -46,7 +47,7 @@ public class UserControllerITest {
             User user = createTestUser();
 
             // when
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
 
             // then
             assertEquals(HttpStatus.CREATED, saveUserResponse.getStatusCode());
@@ -62,7 +63,7 @@ public class UserControllerITest {
                     .build();
 
             // when
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
 
             // then
             assertEquals(HttpStatus.BAD_REQUEST, saveUserResponse.getStatusCode());
@@ -76,7 +77,7 @@ public class UserControllerITest {
                     .build();
 
             // when
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
 
             // then
             assertEquals(HttpStatus.BAD_REQUEST, saveUserResponse.getStatusCode());
@@ -90,7 +91,7 @@ public class UserControllerITest {
                     .build();
 
             // when
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
 
             // then
             assertEquals(HttpStatus.BAD_REQUEST, saveUserResponse.getStatusCode());
@@ -105,7 +106,7 @@ public class UserControllerITest {
                     .build();
 
             // when
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
 
             // then
             assertEquals(HttpStatus.BAD_REQUEST, saveUserResponse.getStatusCode());
@@ -121,11 +122,11 @@ public class UserControllerITest {
         public void givenExistsUserId_whenGetUserById_thenReturnUserWithHttpStatusOk() {
             // given
             User user = createTestUser();
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
             Long userId = saveUserResponse.getBody().getId();
 
             // when
-            ResponseEntity<User> getUserByIdResponse = makeGetUserByIdRequest(userId);
+            ResponseEntity<UserDTO> getUserByIdResponse = makeGetUserByIdRequest(userId);
 
             // then
             assertEquals(HttpStatus.OK, getUserByIdResponse.getStatusCode());
@@ -139,7 +140,7 @@ public class UserControllerITest {
             Long userId = 10L;
 
             // when
-            ResponseEntity<User> getUserByIdResponse = makeGetUserByIdRequest(userId);
+            ResponseEntity<UserDTO> getUserByIdResponse = makeGetUserByIdRequest(userId);
 
             // then
             assertEquals(HttpStatus.NOT_FOUND, getUserByIdResponse.getStatusCode());
@@ -150,11 +151,11 @@ public class UserControllerITest {
             // given
             User user1 = createTestUser();
             User user2 = createTestUser();
-            ResponseEntity<User> saveUserResponse1 = makeUserCreationRequest(user1);
-            ResponseEntity<User> saveUserResponse2 = makeUserCreationRequest(user2);
+            ResponseEntity<UserDTO> saveUserResponse1 = makeUserCreationRequest(user1);
+            ResponseEntity<UserDTO> saveUserResponse2 = makeUserCreationRequest(user2);
 
             // when
-            ResponseEntity<User[]> allUsersResponse = makeGetAllUsersRequest();
+            ResponseEntity<UserDTO[]> allUsersResponse = makeGetAllUsersRequest();
 
             // then
             int expectedNumberOfUsers = 2;
@@ -167,7 +168,7 @@ public class UserControllerITest {
             // given
 
             // when
-            ResponseEntity<User[]> allUsersResponse = makeGetAllUsersRequest();
+            ResponseEntity<UserDTO[]> allUsersResponse = makeGetAllUsersRequest();
 
             // then
             int expectedNumberOfUsers = 0;
@@ -183,41 +184,44 @@ public class UserControllerITest {
         public void givenValidUserData_whenUpdateUser_thenReturnUpdatedUserWithHttpStatusOk() {
             // given
             User user = createTestUser();
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
-            Long userId = saveUserResponse.getBody().getId();
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
 
-            user.setName("UpdatedName");
-            user.setSurname("UpdatedSurname");
+            User updatedUser = User
+                    .builder()
+                    .id(saveUserResponse.getBody().getId())
+                    .name(saveUserResponse.getBody().getName())
+                    .surname(saveUserResponse.getBody().getSurname())
+                    .email(saveUserResponse.getBody().getEmail())
+                    .password("newpassword")
+                    .build();
 
             // when
-            ResponseEntity<User> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/" + userId,
+            ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
-                    new HttpEntity<>(user),
-                    User.class
+                    new HttpEntity<>(updatedUser),
+                    UserDTO.class
             );
 
             // then
             assertEquals(HttpStatus.OK, updateUserResponse.getStatusCode());
-            assertEquals("UpdatedName", updateUserResponse.getBody().getName());
-            assertEquals("UpdatedSurname", updateUserResponse.getBody().getSurname());
         }
 
         @Test
         public void givenInvalidUserData_whenUpdateUser_thenReturnUpdatedUserWithHttpStatusOk() {
             // given
             User user = createTestUser();
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
             Long userId = saveUserResponse.getBody().getId();
 
             user.setName("");
 
             // when
-            ResponseEntity<User> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/" + userId,
+            ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
                     new HttpEntity<>(user),
-                    User.class
+                    UserDTO.class
             );
 
             // then
@@ -227,17 +231,17 @@ public class UserControllerITest {
         public void givenNullAsUserData_whenUpdateUser_thenReturnUpdatedUserWithHttpStatusOk() {
             // given
             User user = createTestUser();
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
             Long userId = saveUserResponse.getBody().getId();
 
-            User nullUser = null;
+            UserDTO nullUser = null;
 
             // when
-            ResponseEntity<User> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/" + userId,
+            ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
                     new HttpEntity<>(nullUser),
-                    User.class
+                    UserDTO.class
             );
 
             // then
@@ -246,15 +250,15 @@ public class UserControllerITest {
         @Test
         public void givenNullAsUserDataAndNotExistedUserId_whenUpdateUser_thenReturnUpdatedUserWithHttpStatusOk() {
             // given
-            User user = null;
+            UserDTO user = null;
             Long userId = 100L;
 
             // when
-            ResponseEntity<User> updateUserResponse = restTemplate.exchange(
-                    "http://localhost:" + port + "/api/v1/user/" + userId,
+            ResponseEntity<UserDTO> updateUserResponse = restTemplate.exchange(
+                    "http://localhost:" + port + "/api/v1/users/",
                     HttpMethod.PUT,
                     new HttpEntity<>(user),
-                    User.class
+                    UserDTO.class
             );
 
             // then
@@ -270,14 +274,14 @@ public class UserControllerITest {
         public void givenExistsUserId_whenDeleteUser_thenUserIsDeleted() {
             // given
             User user = createTestUser();
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
             Long userId = saveUserResponse.getBody().getId();
 
             // when
             ResponseEntity<Void> deleteUserResponse = makeUserDeletionRequest(userId);
 
             // then
-            ResponseEntity<User> getUserByIdResponse = makeGetUserByIdRequest(userId);
+            ResponseEntity<UserDTO> getUserByIdResponse = makeGetUserByIdRequest(userId);
 
             assertEquals(HttpStatus.NO_CONTENT, deleteUserResponse.getStatusCode());
             assertEquals(HttpStatus.NOT_FOUND, getUserByIdResponse.getStatusCode());
@@ -287,7 +291,7 @@ public class UserControllerITest {
         public void givenNotExistsUserId_whenDeleteUser_thenUserIsNotDeleted() {
             // given
             User user = createTestUser();
-            ResponseEntity<User> saveUserResponse = makeUserCreationRequest(user);
+            ResponseEntity<UserDTO> saveUserResponse = makeUserCreationRequest(user);
             Long userId = saveUserResponse.getBody().getId();
             Long noExistedUserId = 111L;
 
@@ -295,7 +299,7 @@ public class UserControllerITest {
             ResponseEntity<Void> deleteUserResponse = makeUserDeletionRequest(noExistedUserId);
 
             // then
-            ResponseEntity<User[]> allUsersResponse = makeGetAllUsersRequest();
+            ResponseEntity<UserDTO[]> allUsersResponse = makeGetAllUsersRequest();
 
             int expectedNumberOfUsers = 1;
             assertEquals(expectedNumberOfUsers, Objects.requireNonNull(allUsersResponse.getBody()).length);
@@ -313,31 +317,31 @@ public class UserControllerITest {
                 .build();
     }
 
-    private ResponseEntity<User> makeGetUserByIdRequest(Long userId) {
+    private ResponseEntity<UserDTO> makeGetUserByIdRequest(Long userId) {
         return restTemplate.getForEntity(
-                "http://localhost:" + port + "/api/v1/user/" + userId,
-                User.class
+                "http://localhost:" + port + "/api/v1/users/" + userId,
+                UserDTO.class
         );
     }
-    private ResponseEntity<User[]> makeGetAllUsersRequest() {
+    private ResponseEntity<UserDTO[]> makeGetAllUsersRequest() {
         return restTemplate.getForEntity(
-                "http://localhost:" + port + "/api/v1/user/all",
-                User[].class
+                "http://localhost:" + port + "/api/v1/users/",
+                UserDTO[].class
         );
     }
 
 
-    private ResponseEntity<User> makeUserCreationRequest(User testUser) {
+    private ResponseEntity<UserDTO> makeUserCreationRequest(User testUser) {
         return restTemplate.postForEntity(
-                "http://localhost:" + port + "/api/v1/user/",
+                "http://localhost:" + port + "/api/v1/users/",
                 testUser,
-                User.class
+                UserDTO.class
         );
     }
     private ResponseEntity<Void> makeUserDeletionRequest(Long userId) {
 
         return restTemplate.exchange(
-                "http://localhost:" + port + "/api/v1/user/" + userId,
+                "http://localhost:" + port + "/api/v1/users/" + userId,
                 HttpMethod.DELETE,
                 null,
                 Void.class
