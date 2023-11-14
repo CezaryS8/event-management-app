@@ -18,9 +18,8 @@ const Form = ({
         className="mt-10 w-full max-w-2xl flex flex-col gap-5 glassmorphism"
       >
         <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">Let's get started </span>
+          <span className="font-satoshi font-semibold text-base text-gray-700">Name</span>
         </label>
-
         <input
           type="text"
           placeholder="Name..."
@@ -29,6 +28,10 @@ const Form = ({
           required
           className="form_input"
         />
+
+        <label>
+          <span className="font-satoshi font-semibold text-base text-gray-700">Surname</span>
+        </label>
         <input
           type="text"
           placeholder="Surname..."
@@ -37,6 +40,10 @@ const Form = ({
           required
           className="form_input"
         />
+
+        <label>
+          <span className="font-satoshi font-semibold text-base text-gray-700">Email</span>
+        </label>
         <input
           type="text"
           placeholder="Email..."
@@ -45,6 +52,10 @@ const Form = ({
           required
           className="form_input"
         />
+
+        <label>
+          <span className="font-satoshi font-semibold text-base text-gray-700">Password</span>
+        </label>
         <input
           type="text"
           placeholder="Password..."
@@ -55,7 +66,7 @@ const Form = ({
         />
 
         <div className="flex-end mx-3 mb-5 gap-4">
-          <Link href="/" className='text-gray-500 text-sm'>
+          <Link href="/users" className='text-gray-500 text-sm'>
             Cancel
           </Link>
           <button

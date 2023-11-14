@@ -1,4 +1,3 @@
-import Feed from '@components/Feed';
 
 export default function HomePage() {
   return (
@@ -11,7 +10,7 @@ export default function HomePage() {
       
       <p className="desc text-center">This app was created for PAMIW laboratory. Feel free to checkout the code and give feedback.</p>
 
-      <Feed />
+    
     </section>
   );
 }
