@@ -38,7 +38,7 @@ function User({ user }: any) {
   return (
     <Link href={`/users/${id}`}>
       <div className="bg-white p-4 rounded-md shadow-md transition duration-300 transform hover:scale-105 cursor-pointer">
-        <h2 className="text-xl font-bold mb-2">{name}</h2>
+        <h2 className="text-xl font-bold mb-2">{name} {surname}</h2>
         <h5 className="text-gray-600">{email}</h5>
       </div>
     </Link>
