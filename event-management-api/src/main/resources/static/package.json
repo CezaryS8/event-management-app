@@ -1,0 +1,14 @@
+{
+  "name": "wasm_sum",
+  "version": "0.1.0",
+  "files": [
+    "wasm_sum_bg.wasm",
+    "wasm_sum.js",
+    "wasm_sum.d.ts"
+  ],
+  "module": "wasm_sum.js",
+  "types": "wasm_sum.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
