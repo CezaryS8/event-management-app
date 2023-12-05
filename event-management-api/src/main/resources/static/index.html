@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sum with WebAssembly</title>
+    <script type="module">
+        import init, { sum } from './wasm_sum.js';
+
+        async function run() {
+            await init();
+            document.getElementById('sum').textContent = sum(5, 3);
+        }
+
+        run();
+    </script>
+</head>
+<body>
+<p>Sum of 5 and 3 is: <span id="sum"></span></p>
+</body>
+</html>

@@ -43,7 +43,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.7.0</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
