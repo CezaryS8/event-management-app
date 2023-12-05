@@ -1,6 +1,4 @@
-import Link from "next/link"
 import '@styles/globals.css'
-import { AppProps } from 'next/app';
 import Nav from '@components/Nav';
 
 export const metadata = {
