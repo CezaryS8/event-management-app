@@ -1,11 +1,9 @@
 package com.pwee.eventmanagmentapp.controller;
 
 import com.pwee.eventmanagmentapp.dto.EventDTO;
-import com.pwee.eventmanagmentapp.entity.Event;
 import com.pwee.eventmanagmentapp.service.EventService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
